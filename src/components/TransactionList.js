@@ -1,8 +1,8 @@
 import React from 'react'
 
-const TransactionList = ({transactions}) => {
-  return (
-    <div>
+const TransactionList = ({ transactions, onDelete }) => {
+    return (
+        <div>
             <table>
                 <thead>
                     <tr>
@@ -19,12 +19,13 @@ const TransactionList = ({transactions}) => {
                             <td>{transaction.description}</td>
                             <td>{transaction.amount}</td>
                             <td>{transaction.date}</td>
+                            <td><button onClick={() => onDelete(transaction.id)} style={{ background: "red" }}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default TransactionList

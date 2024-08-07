@@ -13,7 +13,15 @@ function App() {
       .catch(error => console.log(error))
   }, [])
   const addTransaction = newTransaction => {
-    setTransactions([...transactions, newTransaction])
+    fetch('http://localhost:8001/transactions', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTransaction)
+    })
+      .then(res => res.json())
+      .then(data => setTransactions([...transactions, data]))
   }
   const handleSearch = term => {
     setSearchTerm(term);
@@ -21,10 +29,25 @@ function App() {
   const filteredTransactions = transactions.filter(transaction =>
     transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const handleDelete = id => {
+    fetch(`http://localhost:8001/transactions/${id}`, {
+      method: "DELETE"
+    })
+      .then(response => {
+        if (response.ok) {
+          setTransactions(transactions.filter(transaction => transaction.id !== id));
+        } else {
+          throw new Error("Failed to delete transaction.");
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
   return (
     <div className="App">
       <h1>Bank Transactions</h1>
-      <TransactionList transactions={filteredTransactions} />
+      <TransactionList transactions={filteredTransactions} onDelete={handleDelete} />
       <AddTransactionForm addTransaction={addTransaction} />
       <SearchBar onSearch={handleSearch} />
     </div>
