@@ -8,7 +8,6 @@ const AddTransactionForm = ({ addTransaction }) => {
     const handleSubmit = e => {
         e.preventDefault();
         const newTransaction = {
-
             description,
             amount: parseFloat(amount),
             date
